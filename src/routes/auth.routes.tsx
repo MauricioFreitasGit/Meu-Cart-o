@@ -8,15 +8,19 @@ import home from '../pages/Home';
 const Auth = createStackNavigator();
 
 export default function AuthRoutes() {
+  console.log("deslogado")
+
   return (
     <Auth.Navigator
+      initialRouteName="SignIn"
       screenOptions={{
         headerShown: false,
+        gestureEnabled:false,
         cardStyle: {backgroundColor: '#312e38'},
       }}>
+      <Auth.Screen  name="home" component={home} />
       <Auth.Screen name="SignIn" component={SignIn} />
       <Auth.Screen name="SignUp" component={SingUp} />
-      <Auth.Screen name="home" component={home} />
     </Auth.Navigator>
   );
 }

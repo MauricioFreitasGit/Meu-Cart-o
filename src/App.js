@@ -7,7 +7,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import Routes from './routes';
 
 const App: () => React$Node = () => {
-  console.log('Routes');
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" backgroundColor="#312e38" />

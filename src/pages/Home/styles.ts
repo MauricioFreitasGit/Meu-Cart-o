@@ -19,7 +19,8 @@ export const Header = styled.View`
     background-color:rgba(196, 196, 196, 0.3);
     width:100%;
     height: 143px;
-    border-radius:15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 `;
 
 export const UserText = styled.Text`
@@ -62,7 +63,7 @@ export const ImageIcon = styled.Image`
 
 export const ValorSaldo = styled.Text`
   position: absolute;
-  width: 133px;
+  width: 200px;
   height: 35px;
   left: 136px;
   top: 205px;

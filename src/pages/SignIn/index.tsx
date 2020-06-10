@@ -15,13 +15,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 
 import getValidationErrors from '../../utils/getValidationErrors';
-import { AuthProvider } from '../../hooks/auth';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import {
   Container,
-  Title,
   ForgotPassword,
   ForgotPasswordText,
   CreateAccountButtonText,
@@ -39,15 +37,6 @@ export default function SignIn() {
     email: string;
     senha: string;
   }
-
-  useEffect(() => {
-    async function loadStorageData(){
-      const user = await AsyncStorage.getItem('user');
-
-    }
-
-    loadStorageData();
-  }, []);
     
   const handleSignIn = useCallback(
     async (data: SignInFormData) => {
@@ -76,7 +65,7 @@ export default function SignIn() {
 console.log(error)
         Alert.alert(
           'Erro na autenticação',
-          JSON.stringify(error)
+          'Por favor revise os campos!'
         );
       }
     },

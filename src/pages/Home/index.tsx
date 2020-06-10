@@ -23,7 +23,7 @@ import saindo from '../../assets/pin.png';
 import recarga from '../../assets/more.png';
 import historico from '../../assets/list.png';
 
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StatusBar } from 'react-native';
 import api from '../../services/api';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
@@ -41,13 +41,24 @@ const Home: React.FC = () => {
         }
         loadStorageData();
     }, []);
+
+    function SignOut() {
+        AsyncStorage.removeItem('user').then((response) => {
+            navigation.navigate('SignIn');
+        }
+        ).catch((error) => {
+            console.log(error)
+        })
+    }
     return loading ?
         <Container><ActivityIndicator color="#999" size="large" /></Container> :
+
         <Container>
+            <StatusBar backgroundColor="rgba(196, 196, 196, 0.3);"></StatusBar>
             <Header>
                 <UserText>Olá, Mauricio</UserText>
                 <IconContainer>
-                    <Icon name="power" size={24} color="#FFF" />
+                    <Icon name="power" size={24} color="#FFF" onPress={() => SignOut()} />
                 </IconContainer>
             </Header>
             <ImagePerfil source={perfil} />
@@ -59,11 +70,11 @@ const Home: React.FC = () => {
                     <ButtonSairText>ESTOU SAINDO</ButtonSairText>
                 </ButtonSair>
                 <ButtonRecarga>
-                <ImageIcon source={recarga} ></ImageIcon>
+                    <ImageIcon source={recarga} ></ImageIcon>
                     <ButtonRecargaText>NOVA RECARGA</ButtonRecargaText>
                 </ButtonRecarga>
                 <ButtonHistorico>
-                <ImageIcon source={historico} ></ImageIcon>
+                    <ImageIcon source={historico} ></ImageIcon>
 
                     <ButtonHistoricoText>MEU HISTÓRICO</ButtonHistoricoText>
                 </ButtonHistorico>
