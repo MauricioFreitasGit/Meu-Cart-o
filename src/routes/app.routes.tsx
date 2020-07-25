@@ -1,23 +1,18 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import Home from '../pages/Home';
-import SignIn from '../pages/SignIn';
+import SignIn from '../pages/Home';
+const Auth = createStackNavigator();
 
-const App = createStackNavigator();
+const AppRoutes: React.FC = () =>(
+    <Auth.Navigator
+        screenOptions={{
+            headerShown:false,
+            cardStyle:{backgroundColor:'#312e38'},
+        }}
+    >
+        <Auth.Screen  name="SignIn" component={SignIn}/>
+    </Auth.Navigator>
+)
 
-export default function AppRoutes() {
-  console.log("logado")
-  return (
-    <App.Navigator
-    initialRouteName="Home"
-      screenOptions={{
-        headerShown: false,
-        gestureEnabled:false,
-        cardStyle: {backgroundColor: '#312e38'},
-      }}>
-      <App.Screen name="Home"  component={Home} />
-      <App.Screen name="SignIn" component={SignIn} />
-    </App.Navigator>
-  );
-}
+ export default AppRoutes;

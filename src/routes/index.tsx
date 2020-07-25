@@ -1,33 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { ActivityIndicator, View } from 'react-native'
 import AuthRoutes from './auth.routes';
 import AppRoutes from './app.routes';
-import AsyncStorage from '@react-native-community/async-storage';
-import { ActivityIndicator } from 'react-native'
+import { useAuth } from '../hooks/auth';
 
 const Routes: React.FC = () => {
-  const [user, setUser] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    function loadStorageData() {
-      const usuario = AsyncStorage.getItem('user').then((response) => {
-
-        response != null ? setUser(true) : setUser(false);
-        setLoading(false);
-        console.log(response);
-      }
-      ).catch((error) => {
-        console.log(error)
-      })
-    }
-    loadStorageData();
-  }, [user]);
-
-  if (loading != true) {
-    return user != false ? <AppRoutes /> : <AuthRoutes />
-  }else{
-  return <ActivityIndicator color="#999" size="large" />
+  const { nome, loading } = useAuth();
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#999" />
+      </View>
+    )
   }
-}
+
+  return nome ? <AppRoutes /> : <AuthRoutes />
+};
 
 export default Routes;

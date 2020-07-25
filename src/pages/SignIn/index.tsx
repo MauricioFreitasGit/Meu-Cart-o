@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState ,useEffect} from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -12,8 +12,6 @@ import logoImg from '../../assets/logo.png';
 import * as Yup from 'yup';
 import api from '../../services/api';
 import AsyncStorage from '@react-native-community/async-storage';
-
-
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import Button from '../../components/Button';
@@ -28,8 +26,10 @@ import {
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
-import { FormHandles, useField } from '@unform/core';
+import { FormHandles } from '@unform/core';
+import { useAuth } from '../../hooks/auth'
 export default function SignIn() {
+  const { signIn,user } = useAuth();
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
   const passwordRef = useRef<TextInput>(null);
@@ -37,8 +37,9 @@ export default function SignIn() {
     email: string;
     senha: string;
   }
-    
+
   const handleSignIn = useCallback(
+
     async (data: SignInFormData) => {
       try {
         formRef.current?.setErrors({});
@@ -53,27 +54,31 @@ export default function SignIn() {
           abortEarly: false,
         });
 
-        const response = await api.post('session',data);
-        await AsyncStorage.setItem('user',response.data.nome)
-        navigation.navigate('home')
+        const response =  await signIn({
+          email: data.email,
+          senha: data.senha,
+        });
+
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
           formRef.current?.setErrors(errors);
           return;
         }
-console.log(error)
+        console.log(error)
         Alert.alert(
           'Erro na autenticação',
           'Por favor revise os campos!'
         );
       }
     },
-    [],
+    [signIn],
   );
 
   return (
     <>
+
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}

@@ -26,7 +26,7 @@ export const Header = styled.View`
 export const UserText = styled.Text`
   font-family: 'RobotoSlab-Medium';
   margin: 10px 0 24px;
-  width: 150px;
+  width: 180px;
   height: 21px;
   left: 50px;
   top: 84px;

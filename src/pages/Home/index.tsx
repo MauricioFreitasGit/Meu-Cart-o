@@ -22,48 +22,53 @@ import perfil from '../../assets/boy.png';
 import saindo from '../../assets/pin.png';
 import recarga from '../../assets/more.png';
 import historico from '../../assets/list.png';
+import FormatedValues from '../../utils/formatValue';
 
-import { ActivityIndicator, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import api from '../../services/api';
+
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
 
 
 const Home: React.FC = () => {
-    const navigation = useNavigation();
-    const [loading, setLoading] = useState(true);
+    const [saldo, setSaldo] = useState('');
+    const [user, setUser] = useState('');
 
     useEffect(() => {
         async function loadStorageData() {
-            const user = await AsyncStorage.getItem('user');
-            setLoading(false);
+            const user = await AsyncStorage.getItem('@GoBarber:nome');
+            setUser(user);
+
+            const response =  await api.get('/cartoes',{
+                headers:{
+                    authorization:57
+                }
+            });
+            const [res] = (response.data);
+            setSaldo(FormatedValues(res.saldo));
         }
         loadStorageData();
-    }, []);
+    }, [user,saldo]);
 
-    function SignOut() {
-        AsyncStorage.removeItem('user').then((response) => {
-            navigation.navigate('SignIn');
-        }
-        ).catch((error) => {
-            console.log(error)
-        })
+    async function SignOut() {
+        const usuario = await AsyncStorage.removeItem('user')
+        //navigation.navigate('SignIn');
+
     }
-    return loading ?
-        <Container><ActivityIndicator color="#999" size="large" /></Container> :
+    return (
 
         <Container>
             <StatusBar backgroundColor="rgba(196, 196, 196, 0.3);"></StatusBar>
             <Header>
-                <UserText>Olá, Mauricio</UserText>
+                <UserText>Olá, {user}</UserText>
                 <IconContainer>
-                    <Icon name="power" size={24} color="#FFF" onPress={() => SignOut()} />
+                    <Icon name="power" size={24} color="#FFF" onPress={() => signOut()} />
                 </IconContainer>
             </Header>
             <ImagePerfil source={perfil} />
             <SaldoAtual>saldo atual</SaldoAtual>
-            <ValorSaldo>R$ 500,00</ValorSaldo>
+            <ValorSaldo>{saldo}</ValorSaldo>
             <ContainerButtons>
                 <ButtonSair>
                     <ImageIcon source={saindo} ></ImageIcon>
@@ -80,6 +85,7 @@ const Home: React.FC = () => {
                 </ButtonHistorico>
             </ContainerButtons>
         </Container>
+    );
 }
 
 export default Home;
