@@ -8,13 +8,13 @@ interface SignCredencials {
 }
 
 interface AuthContextData {
-  nome: string;
+  user: object;
   signIn(credencials: SignCredencials): Promise<void>;
   signOut(): void;
   loading:boolean;
 }
 interface AuthState {
-  nome: string;
+  user: object;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -25,10 +25,10 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {
-      const nome = await AsyncStorage.getItem('@GoBarber:nome');
+      const user = await AsyncStorage.getItem('@GoBarber:user');
 
-      if (nome) {
-        setData({nome:nome})
+      if (user) {
+        setData({user:JSON.parse(user)});
       }
       setLoading(false);
     }
@@ -41,19 +41,21 @@ export const AuthProvider: React.FC = ({ children }) => {
       email,
       senha,
     });
-    const { nome } = response.data;
-    AsyncStorage.setItem('@GoBarber:nome', nome);
 
-    setData({ nome });
+    const  user  = response.data;
+
+    AsyncStorage.setItem('@GoBarber:user', JSON.stringify(user));
+
+    setData({ user });
   }, []);
 
   const signOut = useCallback(() => {
-    AsyncStorage.removeItem('@GoBarber:nome');
+    AsyncStorage.removeItem('@GoBarber:user');
 
     setData({} as AuthState);
   }, []);
   return (
-    <AuthContext.Provider value={{ nome: data.nome, signIn, signOut,loading }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut,loading }}>
       {children}
     </AuthContext.Provider>
   );

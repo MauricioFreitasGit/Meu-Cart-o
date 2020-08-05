@@ -10,8 +10,7 @@ import {
 } from 'react-native';
 import logoImg from '../../assets/logo.png';
 import * as Yup from 'yup';
-import api from '../../services/api';
-import AsyncStorage from '@react-native-community/async-storage';
+
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import Button from '../../components/Button';
@@ -29,7 +28,7 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { useAuth } from '../../hooks/auth'
 export default function SignIn() {
-  const { signIn,user } = useAuth();
+  const { signIn } = useAuth();
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
   const passwordRef = useRef<TextInput>(null);

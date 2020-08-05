@@ -27,6 +27,8 @@ import FormatedValues from '../../utils/formatValue';
 import { StatusBar } from 'react-native';
 import api from '../../services/api';
 
+import { useAuth } from '../../hooks/auth'
+
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -35,14 +37,17 @@ const Home: React.FC = () => {
     const [saldo, setSaldo] = useState('');
     const [user, setUser] = useState('');
 
+    const { signOut } = useAuth();
     useEffect(() => {
         async function loadStorageData() {
-            const user = await AsyncStorage.getItem('@GoBarber:nome');
-            setUser(user);
+            const user = await AsyncStorage.getItem('@GoBarber:user');
+            const {nome,id} = JSON.parse(user);
+            
+            setUser(nome);
 
             const response =  await api.get('/cartoes',{
                 headers:{
-                    authorization:57
+                    authorization:id
                 }
             });
             const [res] = (response.data);
@@ -51,11 +56,6 @@ const Home: React.FC = () => {
         loadStorageData();
     }, [user,saldo]);
 
-    async function SignOut() {
-        const usuario = await AsyncStorage.removeItem('user')
-        //navigation.navigate('SignIn');
-
-    }
     return (
 
         <Container>
